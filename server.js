@@ -1,5 +1,5 @@
-const fs = require('fs');
-var http = require('https');
+//const fs = require('fs');
+//var http = require('https');
 var Static = require('node-static');
 var WebSocketServer = new require('ws');
 
@@ -21,9 +21,9 @@ const server = http.createServer({
 	fileServer.serve(req, res);
 });*/
 
-const axios = require('axios').default;
-const md5 = require('md5');
-const moment = require('moment');
+//const axios = require('axios').default;
+//const md5 = require('md5');
+//const moment = require('moment');
 
 
 function usersList(){  // Отправляем новый список пользователя
