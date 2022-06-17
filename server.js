@@ -1,5 +1,5 @@
 //const fs = require('fs');
-//var http = require('https');
+var http = require('https');
 var Static = require('node-static');
 var WebSocketServer = new require('ws');
 
