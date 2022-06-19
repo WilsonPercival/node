@@ -2,7 +2,7 @@
   "name": "wilson_server",
   "version": "1.0.0",
   "description": "",
-  "main": "wilson_server.js",
+  "main": "app.js",
   "dependencies": {
     "express": "^4.18.1",
     "ws": "^8.8.0"
