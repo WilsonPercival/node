@@ -11,6 +11,8 @@ const webSocketServer = new WebSocket.Server({server});
 
 webSocketServer.on("connection", ws => {
 	console.log('connection');
+	
+	ws.send('Hi there, I am a WebSocket server');
 });
 
 server.listen(port, () => console.log(`Server started`));
