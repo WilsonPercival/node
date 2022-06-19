@@ -12,7 +12,11 @@ const webSocketServer = new WebSocket.Server({server});
 webSocketServer.on("connection", ws => {
 	console.log('connection');
 	
-	ws.send('Hi there, I am a WebSocket server');
+	ws.send('Hi');
+	
+	ws.on("message", m => {
+		ws.send('hello');
+	});
 });
 
 server.listen(port, () => console.log(`Server started`));
