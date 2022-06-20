@@ -256,7 +256,7 @@ const logFileName = `logs/log_${new Date().toString().split(`:`).join(``)}.txt`;
 write_log(new Date().toString());
 
 server({port: 8089});
-const arg2 = process.argv[2] === undefined ? "jes.princess" : process.argv[2];
+const arg2 = process.argv[2] === undefined ? "simbochka" : process.argv[2];
 tiktok({tiktokUsername: arg2});
 
 
