@@ -15,6 +15,7 @@ webSocketServer.on("connection", ws => {
 	ws.send('Hi');
 	
 	ws.on("message", m => {
+		console.log('hello');
 		ws.send('hello');
 	});
 });
