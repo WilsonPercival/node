@@ -5,7 +5,7 @@ function server(options)
 	const Static = require("node-static");
 	const WebSocketServer = new require("ws");
 	
-	const webSocketServer = new WebSocketServer.Server({port});
+	const webSocketServer = new WebSocketServer.Server({port: process.env.PORT || 8999});
 	
 	webSocketServer.on("connection", ws => {
 		ws.id = ++clientId;
