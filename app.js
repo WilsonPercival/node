@@ -9,7 +9,9 @@ function server(options)
 	const webSocketServer = new WebSocket.Server({server});
 	
 	webSocketServer.on("connection", ws => {
+		ws.id = ++clientId;
 		
+		clients[ws.id] = ws;
 	});
 	
 	server.listen(port, () => console.log(`Server started`));
@@ -116,7 +118,7 @@ async function tiktok(options)
 	//Пришёл комментарий от кого-то на стриме.
 	tiktokChatConnection.on("chat", data => {
 		console.log(`[chat] ${data["uniqueId"]}: ${data["comment"].substring(0, 40)}`);
-		//send({type: "chat", data});
+		send({type: "chat", data});
 	});
 	
 	/*//Пришёл подарок стримеру.
@@ -140,6 +142,14 @@ async function tiktok(options)
 		send({type: "social", data});
 	});*/
 }
+
+function send(data)
+{
+	Object.values(clients).forEach(client => client.send(JSON.stringify(data)));
+}
+
+const clients = {};
+let clientId = 0;
 
 server({port: 8089});
 const arg2 = process.argv[2] === undefined ? "simbochka" : process.argv[2];
