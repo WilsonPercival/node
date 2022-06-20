@@ -28,16 +28,16 @@ async function tiktok(options)
 	{
 		const state = await tiktokChatConnection.connect();
 		const logConnected = `Connected to room [${tiktokUsername}]`;
-		console_color(logConnected, "FgGreen");
-		write_log(logConnected);
+		//console_color(logConnected, "FgGreen");
+		//write_log(logConnected);
 	}
 	catch (err)
 	{
 		const logFailed = `Failed to connect [${tiktokUsername}]`;
-		console_color(logFailed, "FgRed");
-		write_log(logFailed);
+		//console_color(logFailed, "FgRed");
+		//write_log(logFailed);
 		
-		const errors = {
+		/*const errors = {
 			"Failed to retrieve room_id from page source. User might be offline.": 1, //Неправильный ник; был забанен, потому что в раше (но это не точно).
 			"Failed to retrieve room_id from page source. timeout of 10000ms exceeded": 2, //Слишком частое подключение. Повторите запрос через 10 секунд.
 			"LIVE has ended": 3, //Невозможно подключиться к стриму, т.к. он был завершён.
@@ -64,10 +64,10 @@ async function tiktok(options)
 			return;
 		}
 		
-		console.error(err);
+		console.error(err);*/
 	}
 	
-	//Событие общей ошибки.
+	/*//Событие общей ошибки.
 	tiktokChatConnection.on("error", err => {
 		const logText = `Error!`;
 		console_color(logText, "FgRed");
@@ -111,15 +111,15 @@ async function tiktok(options)
 		{
 			print_get_out();
 		}
-	});
+	});*/
 
 	//Пришёл комментарий от кого-то на стриме.
 	tiktokChatConnection.on("chat", data => {
 		console.log(`[chat] ${data["uniqueId"]}: ${data["comment"].substring(0, 40)}`);
-		send({type: "chat", data});
+		//send({type: "chat", data});
 	});
 	
-	//Пришёл подарок стримеру.
+	/*//Пришёл подарок стримеру.
 	tiktokChatConnection.on("gift", data => {
 		console_color(`[gift] ${data["uniqueId"]}, type ${data["giftType"]} - ${data["repeatEnd"]}`, "FgMagenta");
 		send({type: "gift", data});
@@ -138,11 +138,12 @@ async function tiktok(options)
 	//Пришла подписка от зрителя или он поделился трансляцией.
 	tiktokChatConnection.on("social", data => {
 		send({type: "social", data});
-	});
+	});*/
 }
 
 server({port: 8089});
-
+const arg2 = process.argv[2] === undefined ? "simbochka" : process.argv[2];
+tiktok({tiktokUsername: arg2});
 
 
 
