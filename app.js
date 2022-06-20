@@ -1,11 +1,19 @@
 function server(options)
 {
-	const {port} = options;
+	/*const {port} = options;
 	
 	const Static = require("node-static");
 	const WebSocketServer = new require("ws");
 	
-	const webSocketServer = new WebSocketServer.Server({port: process.env.PORT || 8999});
+	const webSocketServer = new WebSocketServer.Server({port: process.env.PORT || 8999});*/
+	
+	const http = require("http");
+	const express = require("express");
+	const WebSocket = require("ws");
+	const port = process.env.PORT || 8999;
+	const app = express();
+	const server = http.createServer(app);
+	const webSocketServer = new WebSocket.Server({server});
 	
 	webSocketServer.on("connection", ws => {
 		ws.id = ++clientId;
@@ -34,7 +42,9 @@ function server(options)
 		});
 	});
 
-	const fileServer = new Static.Server(".");
+	//const fileServer = new Static.Server(".");
+	
+	server.listen(port, () => console.log(`Server started`));
 	
 	const logHosted = `Server hosted.`;
 	console_color(logHosted, "Bright");
