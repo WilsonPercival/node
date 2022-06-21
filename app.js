@@ -24,10 +24,10 @@ webSocketServer.on("connection", ws => {
 	}, 1000 * 30);
 });
 
-function send(ws, data)
+function send(client, data)
 {
 	b_ping = true;
-	ws.send(data);
+	client.send(data);
 }
 
 b_ping = false;
