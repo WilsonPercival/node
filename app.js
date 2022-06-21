@@ -152,7 +152,7 @@ const clients = {};
 let clientId = 0;
 
 server({port: 8089});
-const arg2 = process.argv[2] === undefined ? "simbochka" : process.argv[2];
+const arg2 = process.argv[2] === undefined ? "asmr_allice" : process.argv[2];
 tiktok({tiktokUsername: arg2});
 
 
