@@ -9,29 +9,96 @@ const server = http.createServer(app);
 
 const webSocketServer = new WebSocket.Server({server});
 
+setInterval(() => send_ping(), 1000 * 30);
+
 webSocketServer.on("connection", ws => {
-	console.log('connection');
+	ws.id =  ++clientID;
+	clients[ws.id] = ws;
+	ws.b_ping = false;
+	console.log(`[connection] id: ${ws.id}; ${get_clients_count()}`);
+	send(ws, {"type": "id", "id": ws.id});
 	
-	ws.on("message", m => {
-		console.log(`[message]`, m.toString());
-		send(ws, m.toString());
+	const allClients = [];
+	const values = Object.values(clients);
+	for (let i = 0; i < values.length; i++)
+	{
+		const client = values[i];
+		allClients.push(client.id);
+	}
+	console.log('all', JSON.stringify(allClients));
+	send_all({"type": "connection", "clients": allClients});
+	
+	ws.on("message", e => {
+		const message = e.toString();
+		
+		const data = JSON.parse(message);
+		const type = data["type"];
+		
+		switch (type)
+		{
+			case "control":
+			{
+				console.log(`[message]`, `id: ${data["id"]}, control: ${data["key"]}-${data["b_state"]}`);
+				//setTimeout(() => send_all(message, false), data["b_state"] ? 20 : 200);
+				send_all(message, false);
+				break;
+			}
+		}
 	});
 	
-	setInterval(() => {
-		console.log('send ping');
-		send(ws, JSON.stringify({"0": 0}));
-		b_ping = false;
-	}, 1000 * 30);
+	ws.on("close", () => {
+		const id = ws.id;
+		delete clients[id];
+		console.log(`[close] id: ${id}; ${get_clients_count()}`);
+	});
 });
 
-function send(client, data)
+function send(client, data, b_stringify=true)
 {
-	b_ping = true;
+	client.b_ping = true;
+	if (b_stringify)
+	{
+		client.send(JSON.stringify(data));
+		return;
+	}
 	client.send(data);
 }
 
-b_ping = false;
+function send_all(data, b_stringify=true)
+{
+	const values = Object.values(clients);
+	for (let i = 0; i < values.length; i++)
+	{
+		const client = values[i];
+		send(client, data, b_stringify);
+	}
+}
 
-//надо как-то сделать чтоб если я отправлял последние 30 сек сообщение, то не пинговало.
+function get_clients_count()
+{
+	return Object.keys(clients).length;
+}
+
+function send_ping()
+{
+	const values = Object.values(clients);
+	for (let i = 0; i < values.length; i++)
+	{
+		const client = values[i];
+		
+		if (client.b_ping)
+		{
+			client.b_ping = false;
+			continue;
+		}
+		
+		send(client, {"type": "ping"});
+		client.b_ping = false;
+		console.log(`send ping ${client.id}`);
+	}
+}
+
+clients = {};
+clientID = 0;
 
 server.listen(port, () => console.log(`Server started`));
