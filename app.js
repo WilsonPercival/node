@@ -34,6 +34,12 @@ webSocketServer.on("connection", ws => {
 				send_all(message, false); //тут не всем, а всем, кроме того, кто прислал.
 				break;
 			}
+			
+			case "ping":
+			{
+				send(ws, {"type": "ping"});
+				break;
+			}
 		}
 	});
 	
@@ -83,7 +89,7 @@ function send_ping()
 			continue;
 		}
 		
-		send(client, {"type": "ping"});
+		send(client, {"type": "peeping"});
 		client.b_ping = false;
 		console.log(`send ping ${client.id}`);
 	}
