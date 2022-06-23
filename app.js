@@ -16,17 +16,8 @@ webSocketServer.on("connection", ws => {
 	clients[ws.id] = ws;
 	ws.b_ping = false;
 	console.log(`[connection] id: ${ws.id}; ${get_clients_count()}`);
-	send(ws, {"type": "id", "id": ws.id});
 	
-	const allClients = [];
-	const values = Object.values(clients);
-	for (let i = 0; i < values.length; i++)
-	{
-		const client = values[i];
-		allClients.push(client.id);
-	}
-	console.log('all', JSON.stringify(allClients));
-	send_all({"type": "connection", "clients": allClients});
+	send_new_connection(ws);
 	
 	ws.on("message", e => {
 		const message = e.toString();
@@ -40,7 +31,7 @@ webSocketServer.on("connection", ws => {
 			{
 				console.log(`[message]`, `id: ${data["id"]}, control: ${data["key"]}-${data["b_state"]}`);
 				//setTimeout(() => send_all(message, false), data["b_state"] ? 20 : 200);
-				send_all(message, false);
+				send_all(message, false); //тут не всем, а всем, кроме того, кто прислал.
 				break;
 			}
 		}
@@ -96,6 +87,21 @@ function send_ping()
 		client.b_ping = false;
 		console.log(`send ping ${client.id}`);
 	}
+}
+
+function send_new_connection(ws)
+{
+	send(ws, {"type": "id", "id": ws.id});
+	
+	const allClients = [];
+	const values = Object.values(clients);
+	for (let i = 0; i < values.length; i++)
+	{
+		const client = values[i];
+		allClients.push(client.id);
+	}
+	console.log('all', JSON.stringify(allClients));
+	send_all({"type": "connection", "clients": allClients});
 }
 
 clients = {};
