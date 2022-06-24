@@ -44,6 +44,7 @@ webSocketServer.on("connection", ws => {
 	
 	ws.on("close", () => {
 		const id = ws.id;
+		send_all({"type": "disconnect", "id": id});
 		delete clients[id];
 		console.log(`[close] id: ${id}; ${get_clients_count()}`);
 	});
