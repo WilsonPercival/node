@@ -30,8 +30,7 @@ webSocketServer.on("connection", ws => {
 			case "control":
 			{
 				console.log(`[message]`, `id: ${data["id"]}, control: ${data["key"]}-${data["b_state"]}`);
-				//setTimeout(() => send_all(message, false), data["b_state"] ? 20 : 200);
-				send_all(message, false); //тут не всем, а всем, кроме того, кто прислал.
+				send_all_except_client(ws, message, false);
 				break;
 			}
 			
@@ -67,6 +66,19 @@ function send_all(data, b_stringify=true)
 	for (let i = 0; i < values.length; i++)
 	{
 		const client = values[i];
+		send(client, data, b_stringify);
+	}
+}
+
+function send_all_except_client(except, data, b_stringify=true)
+{
+	const values = Object.values(clients);
+	for (let i = 0; i < values.length; i++)
+	{
+		const client = values[i];
+		
+		if (except.id === client.id) continue;
+		
 		send(client, data, b_stringify);
 	}
 }
