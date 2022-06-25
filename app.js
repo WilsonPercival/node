@@ -9,6 +9,11 @@ const server = http.createServer(app);
 
 const webSocketServer = new WebSocket.Server({server});
 
+let timeCount = 0;
+setInterval(() => {
+	console.log('time', timeCount++);
+}, 1000 * 60 * 10);
+
 setInterval(() => send_ping(), 1000 * 30);
 
 webSocketServer.on("connection", ws => {
